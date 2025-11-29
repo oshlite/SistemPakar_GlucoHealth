@@ -252,9 +252,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 console.log('✓ Success! Diagnosis found');
                 showAlert('✓ Diagnosis berhasil! Mengarahkan ke hasil...', 'success');
+                
+                // Store in both sessionStorage dan URL parameter
                 sessionStorage.setItem('diagnosisResult', JSON.stringify(data));
+                
+                // Encode data untuk URL
+                const encodedData = btoa(JSON.stringify(data));
+                
                 setTimeout(() => {
-                    window.location.href = 'hasil.html';
+                    window.location.href = 'hasil.html?data=' + encodedData;
                 }, 1500);
             } catch (error) {
                 console.error('❌ Error:', error.message);

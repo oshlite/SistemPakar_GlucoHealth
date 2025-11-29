@@ -608,7 +608,28 @@
         });
 
         function loadDiagnosisResult() {
-            const resultData = sessionStorage.getItem('diagnosisResult');
+            // Try to get from URL parameter first (for GitHub Pages)
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
+            
+            let resultData = null;
+            
+            if (encodedData) {
+                try {
+                    resultData = atob(encodedData);
+                    console.log('✓ Data loaded from URL parameter');
+                } catch (e) {
+                    console.error('Error decoding URL data:', e);
+                }
+            }
+            
+            // Fallback to sessionStorage
+            if (!resultData) {
+                resultData = sessionStorage.getItem('diagnosisResult');
+                if (resultData) {
+                    console.log('✓ Data loaded from sessionStorage');
+                }
+            }
             
             if (!resultData) {
                 document.getElementById('loadingState').innerHTML = `
@@ -623,8 +644,21 @@
                 return;
             }
 
-            const data = JSON.parse(resultData);
-            displayResults(data);
+            try {
+                const data = JSON.parse(resultData);
+                displayResults(data);
+            } catch (e) {
+                console.error('Error parsing diagnosis data:', e);
+                document.getElementById('loadingState').innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        <p>Error membaca data diagnosis</p>
+                        <a href="index.html#diagnosis" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Diagnosis
+                        </a>
+                    </div>
+                `;
+            }
         }
 
         function displayResults(data) {
