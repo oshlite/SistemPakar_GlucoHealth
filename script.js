@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showAlert('✓ Diagnosis berhasil! Mengarahkan ke hasil...', 'success');
                 sessionStorage.setItem('diagnosisResult', JSON.stringify(data));
                 setTimeout(() => {
-                    window.location.href = 'hasil.php';
+                    window.location.href = 'hasil.html';
                 }, 1500);
             } catch (error) {
                 console.error('❌ Error:', error.message);
