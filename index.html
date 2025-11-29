@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoHealth - Sistem Pakar Diagnosis Diabetes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>GlucoHealth</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">Tentang</a></li>
+                <li><a href="#diagnosis" class="nav-link">Diagnosis</a></li>
+                <li><a href="#info" class="nav-link">Info Diabetes</a></li>
+                <li><a href="#contact" class="nav-link">Kontak</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-bg">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">Deteksi Dini</span><br>
+                        Diabetes Mellitus Tipe 2
+                    </h1>
+                    <p class="hero-subtitle">Sistem pakar berbasis Forward Chaining untuk mendiagnosis 9 komplikasi diabetes dengan akurat dan cepat</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">9</div>
+                            <div class="stat-label">Jenis Penyakit</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">32</div>
+                            <div class="stat-label">Gejala Terdata</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Akurasi</div>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="#diagnosis" class="btn btn-primary">
+                            <i class="fas fa-stethoscope"></i> Mulai Diagnosis
+                        </a>
+                        <a href="#about" class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i> Pelajari Lebih Lanjut
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="image-wrapper">
+                        <div class="pulse-ring"></div>
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll untuk melihat lebih lanjut</span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tentang Sistem Kami</h2>
+                <p class="section-subtitle">Menggunakan metode Forward Chaining untuk diagnosis yang akurat</p>
+            </div>
+            <div class="about-content">
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Forward Chaining</h3>
+                    <p>Metode inferensi berbasis aturan yang dimulai dari fakta (gejala) menuju kesimpulan (diagnosis)</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Akurat & Terpercaya</h3>
+                    <p>Berdasarkan penelitian medis dan knowledge base yang telah divalidasi oleh ahli</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Cepat & Mudah</h3>
+                    <p>Proses diagnosis hanya dalam hitungan detik dengan interface yang user-friendly</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diagnosis Section -->
+    <section id="diagnosis" class="diagnosis">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Mulai Diagnosis</h2>
+                <p class="section-subtitle">Pilih gejala yang Anda alami untuk mendapatkan diagnosis</p>
+            </div>
+            
+            <div class="diagnosis-wrapper">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="selectedCount">0</span> gejala dipilih
+                    </div>
+                </div>
+
+                <form id="diagnosisForm">
+                    <div class="gejala-grid">
+                        <!-- Gejala items akan di-generate oleh JavaScript -->
+                        <noscript>
+                            <p>JavaScript harus diaktifkan untuk menampilkan gejala</p>
+                        </noscript>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="resetBtn">
+                            <i class="fas fa-redo"></i> Reset Semua
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                            <i class="fas fa-check-circle"></i> Dapatkan Diagnosis
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section id="info" class="info">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Informasi Penyakit</h2>
+                <p class="section-subtitle">9 Komplikasi Diabetes yang dapat terdeteksi</p>
+            </div>
+            <div class="disease-accordion">
+                <div class="accordion-item" id="disease-P1">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-arrow-down"></i>
+                            <h3>P1 - Hipoglikemia</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Kondisi ketika kadar gula darah terlalu rendah (di bawah 70 mg/dL). Gejala meliputi pusing, lelah, gemetar, dan sulit berkonsentrasi.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Pusing</span>
+                            <span class="badge">Cepat Lapar</span>
+                            <span class="badge">Keringat Berlebihan</span>
+                            <span class="badge">Gelisah</span>
+                            <span class="badge">Mudah Lelah</span>
+                            <span class="badge">Gemetar</span>
+                            <span class="badge">Pandangan Kabur</span>
+                            <span class="badge">Sulit Berkonsentrasi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P2">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>P2 - Hiperglikemia</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Kondisi ketika kadar gula darah terlalu tinggi. Gejala termasuk sering kencing, cepat lapar, sering haus, dan gula darah tinggi.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Sering Kencing</span>
+                            <span class="badge">Cepat Lapar</span>
+                            <span class="badge">Sering Haus</span>
+                            <span class="badge">Gula Darah Tinggi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P3">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-fire"></i>
+                            <h3>P3 - Ketoasidosis Diabetik</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Komplikasi serius diabetes yang ditandai dengan penumpukan asam dalam darah. Memerlukan penanganan medis segera.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Sering Kencing</span>
+                            <span class="badge">Mual dan Muntah</span>
+                            <span class="badge">Mudah Lelah</span>
+                            <span class="badge">Sering Haus</span>
+                            <span class="badge">Nafas Berbau Keton</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P4">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-eye"></i>
+                            <h3>P4 - Retinopati Diabetik</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Komplikasi diabetes yang menyerang mata dan dapat menyebabkan kebutaan jika tidak ditangani.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Penglihatan Menurun</span>
+                            <span class="badge">Bercak Hitam</span>
+                            <span class="badge">Nyeri Mata</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P5">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-kidneys"></i>
+                            <h3>P5 - Nefropati Diabetik</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Kerusakan ginjal akibat diabetes. Dapat berkembang menjadi gagal ginjal jika tidak ditangani dengan baik.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Sering Kencing</span>
+                            <span class="badge">Mual dan Muntah</span>
+                            <span class="badge">Gatal-gatal</span>
+                            <span class="badge">Hilang Nafsu Makan</span>
+                            <span class="badge">Insomnia</span>
+                            <span class="badge">Lemas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P6">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-nerve"></i>
+                            <h3>P6 - Neuropati Diabetik</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Kerusakan saraf akibat diabetes yang dapat mempengaruhi berbagai bagian tubuh.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Keringat Berlebihan</span>
+                            <span class="badge">Gangguan Keseimbangan</span>
+                            <span class="badge">Disfungsi Ereksi</span>
+                            <span class="badge">Penurunan Libido</span>
+                            <span class="badge">Sembelit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P7">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-heart"></i>
+                            <h3>P7 - Penyakit Jantung Koroner</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Penyakit jantung yang terjadi ketika pembuluh darah yang memasok darah ke jantung menyempit atau tersumbat.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Mual dan Muntah</span>
+                            <span class="badge">Gelisah</span>
+                            <span class="badge">Sesak Nafas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P8">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-walking"></i>
+                            <h3>P8 - Penyakit Pembuluh Darah Tepi</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Gangguan pada pembuluh darah di luar jantung dan otak, terutama di kaki.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Sering Kencing</span>
+                            <span class="badge">Disfungsi Ereksi</span>
+                            <span class="badge">Luka Sukar Sembuh</span>
+                            <span class="badge">Mati Rasa Kaki</span>
+                            <span class="badge">Nadi Kaki Lemah</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="disease-P9">
+                    <div class="accordion-header">
+                        <div class="accordion-title">
+                            <i class="fas fa-brain"></i>
+                            <h3>P9 - Penyakit Pembuluh Darah Otak</h3>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Gangguan pembuluh darah otak yang dapat menyebabkan stroke. Memerlukan penanganan segera.</p>
+                        <div class="gejala-list">
+                            <span class="badge">Sering Kencing</span>
+                            <span class="badge">Pusing</span>
+                            <span class="badge">Gangguan Keseimbangan</span>
+                            <span class="badge">Kelumpuhan</span>
+                            <span class="badge">Sulit Berbicara</span>
+                            <span class="badge">Sulit Melihat</span>
+                            <span class="badge">Sulit Menelan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Hubungi Kami</h2>
+                <p class="section-subtitle">Punya pertanyaan? Kami siap membantu Anda</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p class="contact-description">Tim developer GlucoHealth siap membantu Anda. Hubungi kami melalui Instagram untuk pertanyaan, saran, dan feedback.</p>
+                    <div class="team-members">
+                        <div class="team-card">
+                            <div class="team-photo">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <h4>Oryza</h4>
+                            <p class="team-role">Developer</p>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-photo">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <h4>Carissa</h4>
+                            <p class="team-role">Developer</p>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-photo">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <h4>Fernando</h4>
+                            <p class="team-role">Developer</p>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-photo">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <h4>Rizqi</h4>
+                            <p class="team-role">Developer</p>
+                        </div>
+                    </div>
+                    <div class="contact-cta">
+                        <p><strong>📩 DM Instagram Admin:</strong></p>
+                        <a href="https://instagram.com/oshlite" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-instagram"></i> @oshlite
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3><i class="fas fa-heartbeat"></i> GlucoHealth</h3>
+                    <p>Sistem Pakar Diagnosis Diabetes Mellitus Tipe 2</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigasi</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">Tentang</a></li>
+                        <li><a href="#diagnosis">Diagnosis</a></li>
+                        <li><a href="#info">Info Diabetes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-info">
+                    <h4>Informasi</h4>
+                    <p><strong>Kelompok 8 - Kelas D</strong></p>
+                    <p>Penerapan Metode Forward Chaining untuk Mendiagnosa Penyakit Diabetes Mellitus Tipe 2</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GlucoHealth. All rights reserved. Made with <i class="fas fa-heart"></i> by Kelompok 8</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
