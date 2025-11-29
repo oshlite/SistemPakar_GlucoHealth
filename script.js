@@ -5,7 +5,7 @@ function populateGejala() {
     if (!grid) return;
     let html = '';
     Object.entries(gejalaDictionary).forEach(([k, v]) => {
-        html += `<label class="gejala-item"><input type="checkbox" name="gejala[]" value="${k}"><span class="gejala-label">${v}</span><span class="gejala-code">${k}</span></label>`;
+        html += `<label class="gejala-item"><input type="checkbox" class="gejala-checkbox" name="gejala[]" value="${k}"><span class="gejala-label">${v}</span><span class="gejala-code">${k}</span></label>`;
     });
     grid.innerHTML = html;
     grid.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', updateProgress));
@@ -42,8 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Clear previous diagnosis result
     sessionStorage.removeItem('diagnosisResult');
     
+    console.log('=== DOMContentLoaded START ===');
+    console.log('localStorage at page load:', {
+        targetAccordionId: localStorage.getItem('targetAccordionId'),
+        openAccordionOnLoad: localStorage.getItem('openAccordionOnLoad')
+    });
+    
     populateGejala();
     console.log('✓ DOMContentLoaded - gejala populated');
+    
+    // CHECK QUERY PARAMETER untuk accordion
+    const urlParams = new URLSearchParams(window.location.search);
+    const accordionToOpen = urlParams.get('openAccordion');
+    if (accordionToOpen) {
+        console.log('🎯 Query param found: openAccordion=' + accordionToOpen);
+        // Wait untuk element tersedia
+        setTimeout(() => {
+            openAccordionById('disease-' + accordionToOpen);
+        }, 500);
+    }
     
     const resetBtn = document.getElementById('resetBtn');
     if (resetBtn) {
@@ -142,50 +159,203 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('❌ Form #diagnosisForm not found!');
     }
     
-    document.querySelectorAll('.accordion-header').forEach(h => {
-        h.addEventListener('click', () => {
-            const item = h.closest('.accordion-item');
+    // Setup accordion listeners
+    setupAccordionListeners();
+    
+    // Check initial hash immediately
+    console.log('📍 DOMContentLoaded - checking hash');
+    handleDiseaseHash();
+    
+    // Also check after a short delay to ensure DOM is fully ready
+    setTimeout(() => {
+        console.log('📍 Delayed hash check after 300ms');
+        handleDiseaseHash();
+    }, 300);
+    
+    // Additional check if localStorage flag is set
+    if (localStorage.getItem('openAccordionOnLoad') === 'true') {
+        console.log('🚩 openAccordionOnLoad flag detected');
+        setTimeout(() => {
+            console.log('📍 Hash check after 500ms (openAccordionOnLoad)');
+            handleDiseaseHash();
+            localStorage.removeItem('openAccordionOnLoad');
+        }, 500);
+    }
+    
+    // Extra aggressive check after page fully loaded
+    window.addEventListener('load', () => {
+        console.log('📍 Window load event - final hash check');
+        handleDiseaseHash();
+    });
+    
+    // Also check on hashchange event
+    window.addEventListener('hashchange', () => {
+        console.log('📍 Hashchange detected, checking disease hash');
+        handleDiseaseHash();
+    });
+});
+
+function setupAccordionListeners() {
+    document.querySelectorAll('.accordion-header').forEach((header) => {
+        header.addEventListener('click', function() {
+            const item = this.closest('.accordion-item');
             const isActive = item.classList.contains('active');
+            
+            // Close all
             document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            
+            // Open this one if it wasn't active
             if (!isActive) {
                 item.classList.add('active');
             }
         });
     });
+}
+
+function openAccordionById(id) {
+    console.log('🔓 openAccordionById called with:', id);
     
-    // Handle hash link untuk auto-scroll dan auto-open accordion
-    function handleDiseaseHash() {
-        const hash = window.location.hash;
-        console.log('Checking hash:', hash);
-        
-        if (hash.startsWith('#disease-')) {
-            const diseaseId = hash.substring(1); // Remove #
-            console.log('Found disease hash:', diseaseId);
-            
-            setTimeout(() => {
-                const diseaseElement = document.getElementById(diseaseId);
-                console.log('Looking for element:', diseaseId);
-                console.log('Element found:', diseaseElement ? 'YES' : 'NO');
-                
-                if (diseaseElement) {
-                    // Open the accordion
-                    diseaseElement.classList.add('active');
-                    console.log('✓ Added active class to', diseaseId);
-                    
-                    // Scroll ke element
-                    diseaseElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    console.log('✓ Scrolled to', diseaseId);
-                }
-            }, 300);
-        }
+    // Clean ID jika ada hash
+    if (id.startsWith('#')) {
+        id = id.substring(1);
     }
     
-    // Call handler on DOMContentLoaded
-    handleDiseaseHash();
+    const element = document.getElementById(id);
+    console.log('  Looking for element with ID:', id);
+    console.log('  Element found:', element ? 'YES ✅' : 'NO ❌');
     
-    // Also handle hash change
-    window.addEventListener('hashchange', () => {
-        console.log('Hash changed to:', window.location.hash);
-        handleDiseaseHash();
+    if (!element) {
+        console.warn('  ⚠️ Element not found:', id);
+        return false;
+    }
+    
+    console.log('  Element class before:', element.className);
+    
+    // Close semua accordion
+    document.querySelectorAll('.accordion-item').forEach(item => {
+        item.classList.remove('active');
     });
+    
+    // FORCE open target dengan class
+    element.classList.add('active');
+    console.log('  ✅ Added .active class');
+    console.log('  Element class after:', element.className);
+    
+    // FORCE dengan inline style juga (backup)
+    const content = element.querySelector('.accordion-content');
+    if (content) {
+        content.style.maxHeight = '1000px';
+        content.style.padding = '1.5rem';
+        console.log('  ✅ Applied inline styles to content');
+    }
+    
+    // Verify class is present
+    const hasActive = element.classList.contains('active');
+    console.log('  Verify .active class present:', hasActive ? 'YES ✅' : 'NO ❌');
+    
+    if (!hasActive) {
+        console.error('  ❌ FAILED TO ADD ACTIVE CLASS!');
+        return false;
+    }
+    
+    // Scroll into view
+    setTimeout(() => {
+        console.log('  Scrolling to element...');
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        console.log('  ✅ Scroll initiated');
+    }, 100);
+    
+    console.log('  ✅ openAccordionById SUCCESS\n');
+    return true;
+}
+
+// Handle hash link untuk auto-scroll dan auto-open accordion
+function handleDiseaseHash() {
+    let hash = window.location.hash;
+    console.log('\n=== handleDiseaseHash START ===');
+    console.log('Current hash:', hash);
+    console.log('localStorage content:', {
+        targetAccordionId: localStorage.getItem('targetAccordionId'),
+        openAccordionOnLoad: localStorage.getItem('openAccordionOnLoad')
+    });
+    
+    // ALWAYS check localStorage first (priority)
+    const storageId = localStorage.getItem('targetAccordionId');
+    if (storageId) {
+        hash = '#' + storageId;
+        console.log('✅ Using localStorage targetAccordionId:', hash);
+    }
+    
+    // Check localStorage as backup if hash is #info
+    if (hash === '#info' && !storageId) {
+        console.log('Hash is #info but no targetAccordionId in localStorage');
+    }
+    
+    if (hash.startsWith('#disease-')) {
+        const id = hash.substring(1);
+        console.log('🎯 Processing disease ID:', id);
+        
+        // First, ensure we scroll to #info section jika accordion belum ter-render
+        const infoSection = document.getElementById('info');
+        if (!infoSection) {
+            console.log('⚠️ Info section not found, trying to scroll anyway');
+        }
+        
+        // STEP 1: Try immediately first
+        console.log('1️⃣ Attempt immediate open');
+        if (openAccordionById(id)) {
+            console.log('✅ SUCCESS on first attempt');
+            localStorage.removeItem('targetAccordionId');
+            console.log('=== handleDiseaseHash END (SUCCESS) ===\n');
+            return;
+        }
+        
+        // STEP 2: If not found, wait for element with aggressive polling
+        console.log('2️⃣ Element not found yet, polling...');
+        let attempts = 0;
+        const maxAttempts = 120; // 120 * 50ms = 6 seconds (lebih lama untuk safety)
+        
+        const waitForElement = setInterval(() => {
+            attempts++;
+            const element = document.getElementById(id);
+            
+            if (element) {
+                clearInterval(waitForElement);
+                console.log(`✅ Element found on attempt ${attempts}! Opening accordion`);
+                openAccordionById(id);
+                localStorage.removeItem('targetAccordionId');
+                console.log('=== handleDiseaseHash END (POLLING SUCCESS) ===\n');
+            } else if (attempts >= maxAttempts) {
+                clearInterval(waitForElement);
+                console.error(`❌ Element not found after ${attempts} attempts (${attempts * 50}ms)`);
+                
+                // Debug: list available
+                const availableIds = Array.from(document.querySelectorAll('[id^="disease-"]')).map(e => e.id);
+                console.log('Available accordion IDs:', availableIds);
+                
+                // Try force scroll to info section
+                const infoSec = document.getElementById('info');
+                if (infoSec) {
+                    console.log('Scrolling to #info section');
+                    infoSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                console.log('=== handleDiseaseHash END (TIMEOUT) ===\n');
+            }
+        }, 50);
+    }
+    console.log('=== handleDiseaseHash END ===\n');
+}
+
+// Listen for hash changes
+window.addEventListener('hashchange', () => {
+    console.log('\n🔄 HASHCHANGE EVENT FIRED');
+    console.log('New hash:', window.location.hash);
+    handleDiseaseHash();
 });
+
+// PUBLIC DEBUG FUNCTION - bisa di-call dari console untuk test
+window.testAccordion = function(id) {
+    console.log('\n🧪 TEST ACCORDION:', id);
+    openAccordionById(id);
+};

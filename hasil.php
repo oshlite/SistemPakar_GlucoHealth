@@ -321,6 +321,46 @@
             to { transform: rotate(360deg); }
         }
 
+        .document-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e0e0e0;
+            background: linear-gradient(135deg, rgba(255,107,107,0.05) 0%, transparent 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            color: #666;
+            animation: slideInUp 0.6s ease forwards;
+        }
+
+        .document-footer p {
+            margin: 0.8rem 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .document-footer p:first-child {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .document-footer p:nth-child(2) {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .document-footer p:last-child {
+            color: var(--primary-color);
+            font-weight: 700;
+            background: rgba(255,107,107,0.1);
+            padding: 1rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 5px;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
         @media print {
             * {
                 box-shadow: none !important;
@@ -328,7 +368,38 @@
             }
             
             .navbar, .action-buttons, .scroll-indicator {
-                display: none;
+                display: none !important;
+            }
+
+            .document-footer {
+                display: block !important;
+                margin-top: 3rem;
+                padding-top: 2rem;
+                border-top: 2px solid #333;
+                background: #f9f9f9;
+                padding: 1.5rem;
+                page-break-inside: avoid;
+            }
+
+            .document-footer p {
+                font-size: 11px;
+                margin: 0.5rem 0;
+                color: #333;
+                page-break-inside: avoid;
+            }
+
+            .document-footer p:first-child {
+                font-weight: bold;
+                font-size: 12px;
+            }
+
+            .document-footer p:last-child {
+                background: #fff3cd;
+                padding: 0.8rem;
+                border-left: 4px solid #ff6b6b;
+                font-weight: bold;
+                color: #333;
+                margin-top: 1rem;
             }
             
             .hasil-container {
@@ -461,13 +532,15 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                <i class="fas fa-heartbeat"></i>
+                <i class="fas fa-solid fa-heart-circle-check"></i>
                 <span>GlucoHealth</span>
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="index.html#diagnosis" class="nav-link">Diagnosis Baru</a></li>
-                <li><a href="index.html#info" class="nav-link">Info Penyakit</a></li>
+                <li><a href="index.html#about" class="nav-link">Tentang</a></li>
+                <li><a href="index.html#diagnosis" class="nav-link">Diagnosis</a></li>
+                <li><a href="index.html#info" class="nav-link">Info Diabetes</a></li>
+                <li><a href="index.html#contact" class="nav-link">Kontak</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -480,7 +553,7 @@
     <div class="hasil-container">
         <div class="hasil-content">
             <div class="hasil-header">
-                <h1>📊 Hasil Diagnosis</h1>
+                <h1>📊 Hasil Diagnosis 📊</h1>
                 <p>Analisis berdasarkan Forward Chaining Expert System</p>
             </div>
 
@@ -494,6 +567,38 @@
             <div id="diagnosisResult"></div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3><i class="fa-solid fa-heart-circle-check"></i> GlucoHealth</h3>
+                    <p>Sistem Pakar Diagnosis Diabetes Mellitus Tipe 2</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com/oshlite" target="_blank"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigasi</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">Tentang</a></li>
+                        <li><a href="#diagnosis">Diagnosis</a></li>
+                        <li><a href="#info">Info Diabetes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-info">
+                    <h4>Informasi</h4>
+                    <p><strong>Kelompok 8 - Kelas D</strong></p>
+                    <p>Penerapan Metode Forward Chaining untuk Mendiagnosa Penyakit Diabetes Mellitus Tipe 2</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GlucoHealth. All rights reserved. Made with love by Kelompok 8</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
@@ -565,17 +670,20 @@
                 });
             }
 
+            // Document Footer Info (sebelum action buttons)
+            container.innerHTML += `
+                <div class="document-footer">
+                    <p>Dokumen ini dihasilkan oleh GlucoHealth - Sistem Pakar Diagnosis Diabetes</p>
+                    <p>Tanggal: ${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p><i class="fas fa-exclamation-circle"></i> PENTING: Hasil ini hanya untuk referensi. Konsultasikan dengan dokter untuk diagnosis yang lebih akurat.</p>
+                </div>
+            `;
+
             // Action buttons
             container.innerHTML += `
                 <div class="action-buttons">
                     <button onclick="printResult()" class="btn btn-print">
                         <i class="fas fa-print"></i> Cetak Hasil
-                    </button>
-                    <button onclick="downloadPDF()" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download PDF
-                    </button>
-                    <button onclick="goToInfoPenyakit()" class="btn btn-secondary">
-                        <i class="fas fa-info-circle"></i> Info Penyakit
                     </button>
                     <a href="index.html#diagnosis" class="btn btn-secondary">
                         <i class="fas fa-redo"></i> Diagnosis Baru
@@ -945,14 +1053,23 @@
                 try {
                     const data = JSON.parse(resultData);
                     const penyakitId = data.diagnosis_utama.penyakit_id;
-                    console.log('Redirecting to index.html#disease-' + penyakitId);
-                    window.location.href = 'index.html#disease-' + penyakitId;
+                    
+                    // Store in localStorage as backup
+                    localStorage.setItem('targetAccordionId', 'disease-' + penyakitId);
+                    localStorage.setItem('openAccordionOnLoad', 'true');
+                    
+                    const targetUrl = 'index.html#info'; // First go to #info section
+                    console.log('Redirecting to:', targetUrl);
+                    console.log('Will then navigate to disease:', penyakitId);
+                    
+                    // Redirect ke info section dulu, baru ke accordion
+                    window.location.href = targetUrl;
                 } catch (e) {
                     console.error('Error:', e);
                     alert('Terjadi kesalahan saat membuka info penyakit');
                 }
             } else {
-                console.log('No diagnosis data, redirecting to index.html#info');
+                console.log('No diagnosis data, redirecting to index.html');
                 window.location.href = 'index.html#info';
             }
         }
@@ -960,59 +1077,10 @@
         // Handle hash link untuk scroll ke diagnosis di index.html
         document.addEventListener('DOMContentLoaded', () => {
             console.log('✓ hasil.php DOMContentLoaded');
-            
-            const hash = window.location.hash;
-            console.log('Current hash:', hash);
-            
-            if (hash === '#info') {
-                console.log('✓ Hash is #info, will redirect...');
-                // Redirect ke index.html dengan diagnosis ID dari hasil diagnosis jika ada
-                const resultData = sessionStorage.getItem('diagnosisResult');
-                console.log('Result data:', resultData ? 'EXISTS' : 'NOT FOUND');
-                
-                if (resultData) {
-                    try {
-                        const data = JSON.parse(resultData);
-                        const penyakitId = data.diagnosis_utama.penyakit_id;
-                        console.log('✓ Penyakit ID:', penyakitId);
-                        
-                        const targetUrl = 'index.html#disease-' + penyakitId;
-                        console.log('Redirecting to:', targetUrl);
-                        
-                        // Small delay to ensure everything is ready
-                        setTimeout(() => {
-                            window.location.href = targetUrl;
-                        }, 300);
-                    } catch (e) {
-                        console.error('Error parsing:', e);
-                        window.location.href = 'index.html#info';
-                    }
-                } else {
-                    console.log('No result data, redirecting to index.html#info');
-                    window.location.href = 'index.html#info';
-                }
-            }
-        });
-        
-        // Backup: handle if hash arrives later
-        window.addEventListener('load', () => {
-            console.log('Window load event fired');
-            const hash = window.location.hash;
-            if (hash === '#info') {
-                console.log('Backup: Hash is #info at load');
-                const resultData = sessionStorage.getItem('diagnosisResult');
-                if (resultData) {
-                    try {
-                        const data = JSON.parse(resultData);
-                        const penyakitId = data.diagnosis_utama.penyakit_id;
-                        console.log('Backup redirect to:', penyakitId);
-                        window.location.href = 'index.html#disease-' + penyakitId;
-                    } catch (e) {
-                        console.error('Backup error:', e);
-                    }
-                }
-            }
+            loadDiagnosisResult();
         });
     </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
