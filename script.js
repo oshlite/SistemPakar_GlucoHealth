@@ -1,5 +1,136 @@
 ﻿const gejalaDictionary = {"G1":"Poliuria (Sering Kencing)","G2":"Mual dan muntah","G3":"Pusing","G4":"Polifagia (Cepat Lapar)","G5":"Keringat berlebihan","G6":"Gelisah","G7":"Mudah lelah","G8":"Polidipsia (Sering Haus)","G9":"Gangguan Keseimbangan","G10":"Disfungsi ereksi","G11":"Gemetar","G12":"Pandangan Kabur","G13":"Sulit berkonsentrasi","G14":"Gula darah tinggi","G15":"Nafas cepat dan berbau keton","G16":"Penglihatan menurun","G17":"Tampak bercak hitam pada penglihatan","G18":"Nyeri pada mata","G19":"Gatal-gatal","G20":"Hilangnya nafsu makan","G21":"Insomnia","G22":"Lemas","G23":"Penurunan libido","G24":"Sembelit","G25":"Sesak nafas","G26":"Luka infeksi yang sukar sembuh","G27":"Mati rasa atau kelemahan pada kaki","G28":"Tidak ada nadi atau nadi di kaki lemah","G29":"Kelumpuhan pada anggota tubuh","G30":"Sulit berbicara","G31":"Sulit untuk melihat","G32":"Kesulitan menelan"};
 
+const penyakitDictionary = {"P1":"Hipoglikemia","P2":"Hiperglikemia","P3":"Ketoasidosis Diabetik","P4":"Retinopati Diabetik","P5":"Nefropati Diabetik","P6":"Neuropati Diabetik","P7":"Penyakit Jantung Koroner","P8":"Penyakit Pembuluh Darah Tepi","P9":"Penyakit Pembuluh Darah Otak"};
+
+const rules = {
+    "R1": {"gejala": ["G3","G4","G5","G6","G7","G11","G12","G13"], "penyakit": "P1"},
+    "R2": {"gejala": ["G1","G4","G8","G14"], "penyakit": "P2"},
+    "R3": {"gejala": ["G1","G2","G7","G8","G15"], "penyakit": "P3"},
+    "R4": {"gejala": ["G16","G17","G18"], "penyakit": "P4"},
+    "R5": {"gejala": ["G1","G2","G19","G20","G21","G22"], "penyakit": "P5"},
+    "R6": {"gejala": ["G5","G9","G10","G23","G24"], "penyakit": "P6"},
+    "R7": {"gejala": ["G2","G6","G25"], "penyakit": "P7"},
+    "R8": {"gejala": ["G1","G10","G26","G27","G28"], "penyakit": "P8"},
+    "R9": {"gejala": ["G1","G3","G9","G29","G30","G31","G32"], "penyakit": "P9"}
+};
+
+const penyakitDetail = {
+    "P1": {"nama": "Hipoglikemia", "deskripsi": "Kondisi ketika kadar gula darah terlalu rendah (di bawah 70 mg/dL). Gejala meliputi pusing, lelah, gemetar, dan sulit berkonsentrasi.", "tingkat_keparahan": "Sedang", "warna_status": "#FF6B6B", "rekomendasi": ["Minum minuman yang mengandung gula (jus, soda)", "Konsumsi makanan yang cepat diserap (permen, madu)", "Istirahat dan hindari aktivitas berat", "Segera periksakan ke dokter untuk pengecekan gula darah", "Konsultasi dengan ahli gizi untuk penyesuaian diet"]},
+    "P2": {"nama": "Hiperglikemia", "deskripsi": "Kondisi ketika kadar gula darah terlalu tinggi. Gejala termasuk sering kencing, cepat lapar, sering haus, dan gula darah tinggi.", "tingkat_keparahan": "Sedang", "warna_status": "#FFA500", "rekomendasi": ["Batasi konsumsi makanan manis dan karbohidrat sederhana", "Perbanyak minum air putih", "Lakukan olahraga teratur minimal 30 menit setiap hari", "Periksakan gula darah secara berkala", "Konsultasi dengan dokter untuk penyesuaian obat"]},
+    "P3": {"nama": "Ketoasidosis Diabetik", "deskripsi": "Komplikasi serius diabetes yang ditandai dengan penumpukan asam dalam darah. Memerlukan penanganan medis segera.", "tingkat_keparahan": "Sangat Berat", "warna_status": "#DC3545", "rekomendasi": ["⚠️ SEGERA ke rumah sakit atau Unit Gawat Darurat (UGD)", "Jangan menunda perawatan medis", "Bawa kartu identitas dan data medis Anda", "Hubungi anggota keluarga untuk menemani", "Siapkan riwayat kesehatan untuk dibawa ke dokter"]},
+    "P4": {"nama": "Retinopati Diabetik", "deskripsi": "Komplikasi diabetes yang menyerang mata dan dapat menyebabkan kebutaan jika tidak ditangani.", "tingkat_keparahan": "Berat", "warna_status": "#FF6B6B", "rekomendasi": ["Periksa ke dokter mata (oftalmolog) segera", "Lakukan pemeriksaan mata secara berkala (setiap 6-12 bulan)", "Kontrol gula darah dengan ketat", "Hindari paparan sinar matahari langsung yang berlebihan", "Konsumsi makanan kaya antioksidan (blueberry, carrot)"]},
+    "P5": {"nama": "Nefropati Diabetik", "deskripsi": "Kerusakan ginjal akibat diabetes. Dapat berkembang menjadi gagal ginjal jika tidak ditangani dengan baik.", "tingkat_keparahan": "Berat", "warna_status": "#FF6B6B", "rekomendasi": ["Periksa fungsi ginjal melalui tes laboratorium", "Kurangi asupan garam dalam makanan", "Batasi konsumsi protein (terutama daging merah)", "Konsultasi dengan dokter spesialis ginjal (nephrologi)", "Minum air putih cukup (2-3 liter per hari)"]},
+    "P6": {"nama": "Neuropati Diabetik", "deskripsi": "Kerusakan saraf akibat diabetes yang dapat mempengaruhi berbagai bagian tubuh.", "tingkat_keparahan": "Sedang", "warna_status": "#FFA500", "rekomendasi": ["Lakukan pemeriksaan saraf secara berkala", "Hindari cedera pada kaki (gunakan alas kaki yang nyaman)", "Jaga kelembaban kulit dengan krim pelembab", "Olahraga ringan seperti jalan kaki 20-30 menit", "Konsultasi dengan dokter untuk manajemen nyeri neuropati"]},
+    "P7": {"nama": "Penyakit Jantung Koroner", "deskripsi": "Penyakit jantung yang terjadi ketika pembuluh darah yang memasok darah ke jantung menyempit atau tersumbat.", "tingkat_keparahan": "Sangat Berat", "warna_status": "#DC3545", "rekomendasi": ["⚠️ Konsultasi dengan dokter spesialis jantung (kardiologi)", "Lakukan pemeriksaan EKG dan stress test", "Hindari stres dan istirahat yang cukup", "Batasi asupan lemak jenuh dan kolesterol", "Lakukan program rehabilitasi jantung yang dipandu dokter"]},
+    "P8": {"nama": "Penyakit Pembuluh Darah Tepi", "deskripsi": "Gangguan pada pembuluh darah di luar jantung dan otak, terutama di kaki.", "tingkat_keparahan": "Berat", "warna_status": "#FF6B6B", "rekomendasi": ["Periksa ke dokter spesialis pembuluh darah (vaskular)", "Hindari merokok dan paparan asap rokok", "Jaga kebersihan kaki dan hindari luka", "Gunakan kaus kaki yang nyaman dan tidak ketat", "Olahraga ringan seperti berjalan untuk meningkatkan sirkulasi"]},
+    "P9": {"nama": "Penyakit Pembuluh Darah Otak", "deskripsi": "Gangguan pembuluh darah otak yang dapat menyebabkan stroke. Memerlukan penanganan segera.", "tingkat_keparahan": "Sangat Berat", "warna_status": "#DC3545", "rekomendasi": ["⚠️ Jika ada gejala stroke, segera hubungi ambulans (112)", "Tanda stroke: kesulitan bicara, kelemahan separuh tubuh, pusing ekstrem", "Konsultasi dengan dokter saraf (neurologi)", "Hindari stres dan tidur teratur", "Batasi asupan garam dan alkohol"]}
+};
+
+// Forward Chaining Algorithm (JavaScript version)
+function forwardChaining(gejalInput) {
+    if (!Array.isArray(gejalInput) || gejalInput.length === 0) {
+        return [];
+    }
+    
+    const gejalSet = new Set(gejalInput);
+    const hasilMatch = [];
+    
+    // PRIORITAS 1: Cek gejala unik terlebih dahulu
+    const uniqueGejala = {
+        "G13": "P1", "G15": "P3", "G16": "P4", "G17": "P4", "G18": "P4",
+        "G19": "P5", "G20": "P5", "G27": "P8", "G28": "P8"
+    };
+    
+    for (const [g, p] of Object.entries(uniqueGejala)) {
+        if (gejalSet.has(g)) {
+            return [{
+                penyakit_id: p,
+                penyakit_nama: penyakitDictionary[p],
+                confidence: 100,
+                rule_id: 'UNIQUE',
+                gejala_match: 1,
+                jenis_match: 'UNIQUE_INDICATOR'
+            }];
+        }
+    }
+    
+    // PRIORITAS 1b: Heuristic
+    if (gejalSet.has("G5") && gejalSet.has("G7")) {
+        hasilMatch.push({
+            penyakit_id: 'P1',
+            penyakit_nama: penyakitDictionary['P1'],
+            confidence: 100,
+            rule_id: 'HEURISTIC',
+            gejala_match: 2,
+            jenis_match: 'HEURISTIC_PRIORITY'
+        });
+    }
+    
+    if (gejalSet.has("G10") && gejalSet.has("G23") && gejalSet.has("G26")) {
+        return [{
+            penyakit_id: 'P8',
+            penyakit_nama: penyakitDictionary['P8'],
+            confidence: 100,
+            rule_id: 'HEURISTIC_G26',
+            gejala_match: 3,
+            jenis_match: 'HEURISTIC_PRIORITY'
+        }];
+    }
+    
+    // PRIORITAS 2: Exact match
+    for (const [ruleId, rule] of Object.entries(rules)) {
+        let matchCount = 0;
+        for (const g of rule.gejala) {
+            if (gejalSet.has(g)) matchCount++;
+        }
+        
+        if (matchCount === rule.gejala.length) {
+            hasilMatch.push({
+                penyakit_id: rule.penyakit,
+                penyakit_nama: penyakitDictionary[rule.penyakit],
+                confidence: 100,
+                rule_id: ruleId,
+                gejala_match: matchCount,
+                jenis_match: 'EXACT'
+            });
+        }
+    }
+    
+    if (hasilMatch.length > 0) {
+        hasilMatch.sort((a, b) => b.confidence - a.confidence);
+        return hasilMatch;
+    }
+    
+    // PRIORITAS 3: Partial match >= 50%
+    for (const [ruleId, rule] of Object.entries(rules)) {
+        let matchCount = 0;
+        for (const g of rule.gejala) {
+            if (gejalSet.has(g)) matchCount++;
+        }
+        
+        const confidence = (matchCount / rule.gejala.length) * 100;
+        
+        if (confidence >= 50 && matchCount < rule.gejala.length) {
+            hasilMatch.push({
+                penyakit_id: rule.penyakit,
+                penyakit_nama: penyakitDictionary[rule.penyakit],
+                confidence: Math.round(confidence),
+                rule_id: ruleId,
+                gejala_match: matchCount,
+                jenis_match: 'PARTIAL'
+            });
+        }
+    }
+    
+    hasilMatch.sort((a, b) => {
+        if (a.confidence !== b.confidence) return b.confidence - a.confidence;
+        if (a.jenis_match !== b.jenis_match) return a.jenis_match === 'EXACT' ? -1 : 1;
+        return 0;
+    });
+    
+    return hasilMatch;
+}
+
 function populateGejala() {
     const grid = document.querySelector('.gejala-grid');
     if (!grid) return;
@@ -77,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             console.log('✓ Form submit event triggered');
             
-            // Get all checked checkboxes (note: name is now "gejala[]")
+            // Get all checked checkboxes
             const checkboxes = form.querySelectorAll('input[name="gejala[]"]:checked');
             console.log('✓ Found', checkboxes.length, 'checked checkboxes');
             
@@ -89,15 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return; 
             }
             
-            // Create FormData manually
-            const formData = new FormData();
-            gejala.forEach(g => {
-                formData.append('gejala[]', g);
-                console.log('  Added gejala:', g);
-            });
-            
-            console.log('✓ FormData prepared with', gejala.length, 'items');
-            
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
@@ -106,50 +228,37 @@ document.addEventListener('DOMContentLoaded', () => {
             showAlert('Sedang memproses diagnosis...', 'info');
             
             try {
-                console.log('✓ Sending to diagnosis.php...');
+                // Run forward chaining algorithm
+                const hasilDiagnosis = forwardChaining(gejala);
+                console.log('✓ Forward chaining completed, results:', hasilDiagnosis.length);
                 
-                const res = await fetch('diagnosis.php', { 
-                    method: 'POST', 
-                    body: formData
-                });
-                
-                console.log('✓ Response received, status:', res.status);
-                
-                const text = await res.text();
-                console.log('✓ Response length:', text.length, 'chars');
-                
-                if (!text || text.trim() === '') {
-                    throw new Error('Server returned empty response');
+                if (hasilDiagnosis.length === 0) {
+                    throw new Error('Gejala yang Anda pilih tidak cocok dengan pola penyakit yang diketahui');
                 }
                 
-                // Try to parse JSON
-                let data;
-                try {
-                    data = JSON.parse(text);
-                    console.log('✓ Parsed JSON:', data.status);
-                } catch (parseErr) {
-                    console.error('❌ JSON parse error');
-                    console.error('Response:', text.substring(0, 200));
-                    throw new Error('Invalid JSON response');
-                }
+                // Prepare diagnosis result
+                const diagnosisUtama = hasilDiagnosis[0];
+                const data = {
+                    status: 'success',
+                    timestamp: new Date().toISOString(),
+                    gejala_input: gejala.map(g => ({
+                        id: g,
+                        nama: gejalaDictionary[g]
+                    })),
+                    diagnosis_utama: diagnosisUtama,
+                    kemungkinan_lain: hasilDiagnosis.slice(1, 2),
+                    penyakit_detail: penyakitDetail[diagnosisUtama.penyakit_id] || {}
+                };
                 
-                if (data.status === 'success') {
-                    console.log('✓ Success! Diagnosis found');
-                    showAlert('✓ Diagnosis berhasil! Mengarahkan ke hasil...', 'success');
-                    sessionStorage.setItem('diagnosisResult', JSON.stringify(data));
-                    setTimeout(() => {
-                        window.location.href = 'hasil.php';
-                    }, 1500);
-                } else if (data.status === 'warning' || data.status === 'error') {
-                    console.warn('⚠️ No diagnosis match:', data.message);
-                    showAlert('⚠️ ' + data.message, 'error');
-                } else {
-                    console.error('? Unknown status:', data);
-                    showAlert('Status tidak dikenali', 'error');
-                }
+                console.log('✓ Success! Diagnosis found');
+                showAlert('✓ Diagnosis berhasil! Mengarahkan ke hasil...', 'success');
+                sessionStorage.setItem('diagnosisResult', JSON.stringify(data));
+                setTimeout(() => {
+                    window.location.href = 'hasil.php';
+                }, 1500);
             } catch (error) {
                 console.error('❌ Error:', error.message);
-                showAlert('Kesalahan: ' + error.message, 'error');
+                showAlert('⚠️ ' + error.message, 'error');
             } finally {
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
